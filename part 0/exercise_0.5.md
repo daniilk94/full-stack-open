@@ -3,13 +3,7 @@ sequenceDiagram
     participant browser
     participant server
 
-    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
-    activate server
-    server-->>browser: Status Code 302
-    deactivate server
-
-    Note left of server:  Server asks browser to perform a GET request to the address defined in header's location
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa
     activate server
     server-->>browser: HTML document
     deactivate server
@@ -19,7 +13,7 @@ sequenceDiagram
     server-->>browser: the css file
     deactivate server
 
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
     activate server
     server-->>browser: the JavaScript file
     deactivate server
@@ -31,5 +25,5 @@ sequenceDiagram
     server-->>browser: [{ "content: "hallo", date: "2026-06-03" }, ... ]
     deactivate server
 
-    Note right of browser: The browser executes the callback function that renders the notes. <br/> The notes will include the payload submitted with initial POST request
+    Note right of browser: The browser executes the callback function that renders the notes
 ```
