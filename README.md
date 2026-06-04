@@ -4,11 +4,18 @@ This repository will be used as a submission space for exercices
 
 ## Structure of the repository
 
-- part 0
-  - exercise 1
-  - exercice 2
-- part 1
-  - exercise 1
-  - exercise 2
-- part 2
+- part0
+  - task 
+  - task 
+- part1
+  - courseinfo
+    - task
+    - task
+  - unicafe
+    - task
+    - task
+  - anecdotes  
+- part2
+  - courseinfo
+    - task
 ...
