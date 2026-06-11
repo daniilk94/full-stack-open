@@ -9,13 +9,12 @@ This repository will be used as a submission space for exercices
   - task 
 - part1
   - courseinfo
-    - task
-    - task
+    - files
   - unicafe
-    - task
-    - task
-  - anecdotes  
+    - files 
+  - anecdotes
+    - files 
 - part2
-  - courseinfo
-    - task
+  - project
+    - files
 ...
