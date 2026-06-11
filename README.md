@@ -5,8 +5,7 @@ This repository will be used as a submission space for exercices
 ## Structure of the repository
 
 - part0
-  - task 
-  - task 
+  - files
 - part1
   - courseinfo
     - files

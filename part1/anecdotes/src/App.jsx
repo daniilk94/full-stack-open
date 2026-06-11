@@ -55,9 +55,6 @@ const App = () => {
     setVotes(copy);
   };
 
-  console.log(votes);
-  console.log(top);
-
   return (
     <div>
       <Header header="Anecdote of the day" />
