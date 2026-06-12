@@ -1,6 +1,6 @@
 import Course from './components/Course'
 
-const CoursesInfo = ({courses}) => {
+const CourseInfo = ({courses}) => {
   return (
     <div>
       {courses.map((course) => <Course key={course.id} course={course} />)}
@@ -54,7 +54,7 @@ const App = () => {
     },
   ];
 
-  return <CoursesInfo courses={courses} />;
+  return <CourseInfo courses={courses} />;
 };
 
 export default App;
