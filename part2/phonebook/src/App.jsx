@@ -26,12 +26,17 @@ const App = () => {
       id: persons.length + 1,
     };
 
-    persons.map((person) => person.name).includes(newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : persons.map((person) => person.number).includes(newNumber)
-        ? alert(`${newNumber} is already added to phonebook`)
-        : setPersons(persons.concat(newPerson));
+    const nameExists = persons.some((person) => person.name === newName);
+    const numberExists = persons.some((person) => person.number === newNumber);
 
+    if (nameExists) {
+      alert(`${newName} is already added to phonebook`);
+    } else if (numberExists) {
+      alert(`${newNumber} is already added to phonebook`);
+    } else {
+      setPersons(persons.concat(newPerson));
+    }
+    
     setNewName("");
     setNewNumber("");
   };
