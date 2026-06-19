@@ -3,12 +3,55 @@ import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
 import contactService from "./services/contacts";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterValue, setNewFilterValue] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState(null);
+
+  const showNotification = (action) => {
+    switch (action) {
+      case "numberExists":
+        setNotificationMessage({
+          text: `Number ${newNumber} is already added to phonebook with another name`,
+          type: "error",
+        });
+        break;
+      case "personNotFound":
+        setNotificationMessage({
+          text: `Information of ${newName} has already been deleted from server`,
+          type: "error",
+        });
+        break;
+      case "personCreated":
+        setNotificationMessage({
+          text: `Added ${newName}`,
+          type: "success",
+        });
+        break;
+      case "personUpdated":
+        setNotificationMessage({
+          text: `The number of ${newName} has been successfully changed to ${newNumber}`,
+          type: "success",
+        });
+        break;
+      case "personDeleted":
+        setNotificationMessage({
+          text: `Chosen person deleted`,
+          type: "success",
+        });
+        break;
+      default:
+        break;
+    }
+
+    setTimeout(() => {
+      setNotificationMessage(null);
+    }, 3000);
+  };
 
   const getPersons = () => {
     contactService.getAll().then((personsList) => setPersons(personsList));
@@ -26,10 +69,6 @@ const App = () => {
 
     const existingPerson = persons.find((p) => p.name === newName);
     const numberExists = persons.some((person) => person.number === newNumber);
-    const showNumberAlert = () =>
-      alert(
-        `Number ${newNumber} is already added to phonebook with another name`,
-      );
 
     //Update section
     if (existingPerson) {
@@ -45,7 +84,7 @@ const App = () => {
         )
       ) {
         if (numberExists) {
-          showNumberAlert();
+          showNotification("numberExists");
           return;
         }
         handleUpdate(existingPerson, changedPerson);
@@ -55,7 +94,7 @@ const App = () => {
 
     //Create section
     if (numberExists) {
-      showNumberAlert();
+      showNotification("numberExists");
       return;
     }
 
@@ -65,6 +104,7 @@ const App = () => {
         setPersons(persons.concat(returnedPerson));
         setNewName("");
         setNewNumber("");
+        showNotification("personCreated");
       })
       .catch((e) => console.log(e.message));
   };
@@ -73,8 +113,15 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`))
       contactService
         .remove(person.id)
-        .then(() => setPersons(persons.filter((p) => p.id !== person.id)))
-        .catch((e) => console.log(e.message));
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== person.id));
+          showNotification("personDeleted");
+        })
+        .catch((e) => {
+          console.log(e.message);
+          setPersons(persons.filter((p) => p.id !== person.id));
+          showNotification("personDeleted");
+        });
   };
 
   const handleUpdate = (existingPerson, changedPerson) => {
@@ -86,8 +133,13 @@ const App = () => {
         );
         setNewName("");
         setNewNumber("");
+        showNotification("personUpdated");
       })
-      .catch((e) => console.log(e.message));
+      .catch((e) => {
+        console.log(e.message);
+        setPersons(persons.filter((p) => p.id !== changedPerson.id));
+        showNotification("personNotFound");
+      });
   };
 
   const handleFiltering = (event) => {
@@ -108,6 +160,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter value={filterValue} onChange={handleFiltering} />
       <h3>add a new</h3>
       <PersonForm
