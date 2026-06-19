@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
-import axios from "axios";
+import contactService from "./services/contacts";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,35 +10,84 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filterValue, setNewFilterValue] = useState("");
 
-  const fetchData = () => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
-    });
+  const getPersons = () => {
+    contactService.getAll().then((personsList) => setPersons(personsList));
   };
 
-  useEffect(fetchData, []);
+  useEffect(getPersons, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const newPerson = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
     };
 
-    const nameExists = persons.some((person) => person.name === newName);
+    const existingPerson = persons.find((p) => p.name === newName);
     const numberExists = persons.some((person) => person.number === newNumber);
+    const showNumberAlert = () =>
+      alert(
+        `Number ${newNumber} is already added to phonebook with another name`,
+      );
 
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`);
-    } else if (numberExists) {
-      alert(`${newNumber} is already added to phonebook`);
-    } else {
-      setPersons(persons.concat(newPerson));
+    //Update section
+    if (existingPerson) {
+      const changedPerson = {
+        ...existingPerson,
+        name: newName,
+        number: newNumber,
+      };
+
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook. replace the old number with a new one?`,
+        )
+      ) {
+        if (numberExists) {
+          showNumberAlert();
+          return;
+        }
+        handleUpdate(existingPerson, changedPerson);
+      }
+      return;
     }
-    
-    setNewName("");
-    setNewNumber("");
+
+    //Create section
+    if (numberExists) {
+      showNumberAlert();
+      return;
+    }
+
+    contactService
+      .create(newPerson)
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((e) => console.log(e.message));
+  };
+
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`))
+      contactService
+        .remove(person.id)
+        .then(() => setPersons(persons.filter((p) => p.id !== person.id)))
+        .catch((e) => console.log(e.message));
+  };
+
+  const handleUpdate = (existingPerson, changedPerson) => {
+    contactService
+      .update(existingPerson.id, changedPerson)
+      .then((returnedPerson) => {
+        setPersons(
+          persons.map((p) => (p.id === existingPerson.id ? returnedPerson : p)),
+        );
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((e) => console.log(e.message));
   };
 
   const handleFiltering = (event) => {
@@ -69,7 +118,7 @@ const App = () => {
         handleSubmit={handleSubmit}
       />
       <h3>Numbers</h3>
-      <Persons persons={personsDisplay} />
+      <Persons persons={personsDisplay} onClickDelete={handleDelete} />
     </div>
   );
 };
