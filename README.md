@@ -10,10 +10,11 @@ This repository will be used as a submission space for exercices
   - courseinfo
     - files
   - unicafe
-    - files 
-  - anecdotes
-    - files 
-- part2
-  - project
     - files
-...
+  - anecdotes
+    - files
+- part2
+  - project - files
+    ...
+
+[Phonebook online application](https://full-stack-open-55ag.onrender.com/)
