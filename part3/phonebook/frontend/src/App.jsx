@@ -12,7 +12,7 @@ const App = () => {
   const [filterValue, setNewFilterValue] = useState("");
   const [notificationMessage, setNotificationMessage] = useState(null);
 
-  const showNotification = (action) => {
+  const showNotification = (action, error) => {
     switch (action) {
       case "numberExists":
         setNotificationMessage({
@@ -42,6 +42,12 @@ const App = () => {
         setNotificationMessage({
           text: `Chosen person deleted`,
           type: "success",
+        });
+        break;
+      case "unknownError":
+        setNotificationMessage({
+          text: `${error}`,
+          type: "error",
         });
         break;
       default:
@@ -106,7 +112,9 @@ const App = () => {
         setNewNumber("");
         showNotification("personCreated");
       })
-      .catch((e) => console.log(e.message));
+      .catch((error) => {
+        showNotification("unknownError", error.response.data.error);
+      });
   };
 
   const handleDelete = (person) => {
@@ -135,10 +143,14 @@ const App = () => {
         setNewNumber("");
         showNotification("personUpdated");
       })
-      .catch((e) => {
-        console.log(e.message);
-        setPersons(persons.filter((p) => p.id !== changedPerson.id));
-        showNotification("personNotFound");
+      .catch((error) => {
+        console.log(error.message);
+        if (error.response.status === 404) {
+          setPersons(persons.filter((p) => p.id !== changedPerson.id));
+          showNotification("personNotFound");
+        } else {
+          showNotification("unknownError", error.response.data.error);
+        }
       });
   };
 

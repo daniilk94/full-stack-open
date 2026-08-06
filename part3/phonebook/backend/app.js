@@ -18,6 +18,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "wrong id format" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
   }
   next(error);
 };
@@ -69,6 +71,7 @@ app.delete("/api/persons/:id", (request, response, next) => {
 app.put("/api/persons/:id", (request, response, next) => {
   const number = request.body.number;
   const id = request.params.id;
+
   Person.findById(id)
     .then((person) => {
       if (!person) {
