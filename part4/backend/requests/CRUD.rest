@@ -11,3 +11,17 @@ Content-Type: application/json
   "url": "www.superblog.com",
   "likes": 56
 }
+
+### delete blog
+DELETE http://localhost:3003/api/blogs/6a8577264f82cfb933d7155e
+
+### update blog
+PUT http://localhost:3003/api/blogs/6a7996d82162d64a077b424
+Content-Type: application/json
+
+{
+  "title": "Updated blog?",
+  "author": "John Horseman",
+  "url": "www.superblog.fi",
+  "likes": 1056
+}
