@@ -6,10 +6,11 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "What is blog?",
+  "title": "How to create Api? Part2",
   "author": "John Dwayne",
   "url": "www.superblog.com",
-  "likes": 56
+  "likes": 56,
+  "userId": ""
 }
 
 ### delete blog
