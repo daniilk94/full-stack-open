@@ -1,24 +1,26 @@
+@token = ...
 ### get all blogs
 GET http://localhost:3003/api/blogs
 
 ### add blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  "title": "How to create Api? Part2",
-  "author": "John Dwayne",
-  "url": "www.superblog.com",
-  "likes": 56,
-  "userId": ""
+  "title": "Blog 5",
+  "author": "Jack Sparrow",
+  "url": "www.sparrow.com",
+  "likes": 111
 }
 
 ### delete blog
-DELETE http://localhost:3003/api/blogs/6a8577264f82cfb933d7155e
+DELETE http://localhost:3003/api/blogs/6a88442dded9c7efd5546afd
+Authorization: Bearer {{token}}
 
-### update blog
-PUT http://localhost:3003/api/blogs/6a7996d82162d64a077b424
-Content-Type: application/json
+###update blog
+PUT http://localhost:3003/api/blogs/6a884447ded9c7efd5546afe
+Content-Type: application/json 
 
 {
   "title": "Updated blog?",
