@@ -13,7 +13,7 @@ const App = () => {
   const [notificationData, setNotificationData] = useState(null)
 
   useEffect(() => {
-    async function loadingUserFromLocalStorage() {
+    function loadingUserFromLocalStorage() {
       const loggedUserJSON = window.localStorage.getItem(
         'loggedBlogListAppUser',
       )
