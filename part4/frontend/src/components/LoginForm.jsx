@@ -1,0 +1,32 @@
+const LoginForm = (props) => {
+  return (
+    <div>
+      <h2>Log in to Application</h2>
+      <form onSubmit={props.handleLogin}>
+        <div>
+          <label>
+            username
+            <input
+              type="text"
+              value={props.username}
+              onChange={props.handleUsernameChange}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            password
+            <input
+              type="password"
+              value={props.password}
+              onChange={props.handlePasswordChange}
+            />
+          </label>
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  )
+}
+
+export default LoginForm
